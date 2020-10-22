@@ -97,7 +97,7 @@ class ColorWings_Admin {
 		$wp_customize->add_section(
 			'extra_styles',
 			array(
-				'title'      => __( 'Extra Styles', 'greenlet' ),
+				'title'      => __( 'Extra Styles', 'colorwings' ),
 				'priority'   => 900,
 				'capability' => 'edit_theme_options',
 			)
