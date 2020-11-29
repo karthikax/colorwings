@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Color Wings
  * Description: Visual Style Editor
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: Karthik Bhat
  * Author URI: https://karthikbhat.net/
  * License: GPL2

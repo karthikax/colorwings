@@ -1,4 +1,4 @@
-/** @license ColorWings v1.0.0
+/** @license ColorWings v1.1.0
 * color-wings-preview.js
 *
 * Copyright (c) Color Wings and its affiliates.
@@ -163,11 +163,13 @@
 	}
 
 	function _createSuper(Derived) {
-	  return function () {
+	  var hasNativeReflectConstruct = _isNativeReflectConstruct();
+
+	  return function _createSuperInternal() {
 	    var Super = _getPrototypeOf(Derived),
 	        result;
 
-	    if (_isNativeReflectConstruct()) {
+	    if (hasNativeReflectConstruct) {
 	      var NewTarget = _getPrototypeOf(this).constructor;
 
 	      result = Reflect.construct(Super, arguments, NewTarget);
@@ -231,7 +233,7 @@
 	  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
 	  var n = Object.prototype.toString.call(o).slice(8, -1);
 	  if (n === "Object" && o.constructor) n = o.constructor.name;
-	  if (n === "Map" || n === "Set") return Array.from(n);
+	  if (n === "Map" || n === "Set") return Array.from(o);
 	  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
 	}
 
@@ -812,11 +814,11 @@
 
 	  if (PreviewStore.isFocused() && op !== 'lock') {
 	    PreviewStore.unlockFocus();
-	    Evt.emit('focusUnlocked', currentSelector);
+	    Evt.emit('focus-unlocked', currentSelector);
 	    deHighlight();
 	  } else {
 	    PreviewStore.lockFocus();
-	    Evt.emit('focusLocked', {
+	    Evt.emit('focus-locked', {
 	      currentSelector: currentSelector,
 	      currentTarget: currentTarget
 	    });
@@ -854,7 +856,6 @@
 	  }
 	};
 
-	var $ = jQuery;
 	function debounce(callback, wait) {
 	  var immediate = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 	  var timeout = null;
@@ -1152,8 +1153,8 @@
 	  }
 	};
 
-	cw.Evt.on('focusLocked', showTree);
-	cw.Evt.on('focusUnlocked', hideTree);
+	cw.Evt.on('focus-locked', showTree);
+	cw.Evt.on('focus-unlocked', hideTree);
 
 	function Focuser() {
 	  var _useStore = useStore(PreviewStore),
@@ -1189,7 +1190,7 @@
 	      focusDetails = _useStore.focusDetails,
 	      detailsOpacity = _useStore.detailsOpacity;
 
-	  var styles = _objectSpread2({}, focusDetails.style, {
+	  var styles = _objectSpread2(_objectSpread2({}, focusDetails.style), {}, {
 	    opacity: detailsOpacity
 	  });
 
@@ -1347,7 +1348,7 @@
 	      value = _ref5.value,
 	      onChange = _ref5.onChange;
 	  var cOptions = clone(options).map(function (option) {
-	    return _objectSpread2({}, option, {
+	    return _objectSpread2(_objectSpread2({}, option), {}, {
 	      selected: value.includes(option.value)
 	    });
 	  });
@@ -1409,7 +1410,7 @@
 	  })), /*#__PURE__*/React.createElement("style", null, similarStyles));
 	}
 
-	var styles$1 = "#color-wings {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 0;\n  overflow: visible;\n  z-index: 1500; }\n\n#cw-focuser .cw-focus-line {\n  position: absolute;\n  border-color: #7cb342;\n  border-style: solid;\n  border-width: 0;\n  box-shadow: 0 0 2px rgba(124, 179, 66, 0.6); }\n\n#cw-focus-details {\n  position: absolute;\n  color: #fff;\n  font-size: 12px;\n  line-height: 24px;\n  font-weight: 500; }\n  #cw-focus-details .cw-selector {\n    padding: 0 10px; }\n\n#cw-highlighter .cw-highlight-box {\n  position: absolute; }\n\n#cw-highlighter .cw-highlight-main {\n  position: absolute;\n  background: rgba(92, 153, 214, 0.6); }\n\n#cw-highlighter .cw-highlight-padding {\n  position: absolute;\n  top: 0;\n  left: 0;\n  border: 0 solid rgba(147, 197, 129, 0.6);\n  box-sizing: border-box; }\n\n#cw-highlighter .cw-highlight-margin {\n  position: absolute;\n  border: 0 solid rgba(244, 166, 87, 0.6);\n  box-sizing: content-box; }\n\n.customize-partial-edit-shortcut, .customize-partial-edit-shortcut {\n  display: none; }\n";
+	var styles$1 = "#color-wings {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 0;\n  overflow: visible;\n  z-index: 1500; }\n\n#cw-focuser .cw-focus-line {\n  position: absolute;\n  border-color: #7cb342;\n  border-style: solid;\n  border-width: 0;\n  box-shadow: 0 0 2px rgba(124, 179, 66, 0.6); }\n\n#cw-focus-details {\n  position: absolute;\n  color: #fff;\n  font-size: 12px;\n  line-height: 24px;\n  font-weight: 500; }\n  #cw-focus-details .cw-selector {\n    padding: 0 10px;\n    white-space: nowrap; }\n\n#cw-highlighter .cw-highlight-box {\n  position: absolute; }\n\n#cw-highlighter .cw-highlight-main {\n  position: absolute;\n  background: rgba(92, 153, 214, 0.6); }\n\n#cw-highlighter .cw-highlight-padding {\n  position: absolute;\n  top: 0;\n  left: 0;\n  border: 0 solid rgba(147, 197, 129, 0.6);\n  box-sizing: border-box; }\n\n#cw-highlighter .cw-highlight-margin {\n  position: absolute;\n  border: 0 solid rgba(244, 166, 87, 0.6);\n  box-sizing: content-box; }\n\n.customize-partial-edit-shortcut, .customize-partial-edit-shortcut {\n  display: none; }\n";
 
 	function Canvas() {
 	  return /*#__PURE__*/React.createElement("div", {
