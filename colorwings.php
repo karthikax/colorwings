@@ -12,6 +12,7 @@
  * Load colorwings.
  */
 function load_colorwings() {
+	// require_once dirname( __FILE__ ) . '/pro/class-pro.php';
 	require_once dirname( __FILE__ ) . '/class-colorwings.php';
 }
 
